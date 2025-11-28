@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=file:/home/nextjs/app-data/database.db
+      - NODE_ENV=production
+    volumes:
+      - app-data:/home/nextjs/app-data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.mjs"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  app-data:
+    driver: local
